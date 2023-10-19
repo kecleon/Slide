@@ -2,7 +2,7 @@
 
 public class Web
 {
-	private const string ApiUrl = "http://your-web-server-endpoint/api/data";
+	private string ApiUrl = "http://{EnvUrl}/api/data";
 
 	public async Task<string> LoadHome()
 	{
