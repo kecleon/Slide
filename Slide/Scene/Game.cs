@@ -43,7 +43,7 @@ public class Game : Scene
 
 	public override void Initialize()
 	{
-		Log.Debug("Initializing Menu");
+		Log.Debug("Initializing Game");
 		
 		// This will be the color of the background after we clear it, in normalized colors.
 		// Normalized colors are mapped on a range of 0.0 to 1.0, with 0.0 representing black, and 1.0 representing
