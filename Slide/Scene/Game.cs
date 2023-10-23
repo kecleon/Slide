@@ -2,7 +2,6 @@
 using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
 using OpenTK.Graphics.OpenGL4;
-using OpenTK.Windowing.Common;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 using OpenTK.Windowing.Desktop;
 using BufferTarget = OpenTK.Graphics.OpenGL4.BufferTarget;
@@ -44,10 +43,8 @@ public class Game : Scene
 
 	public override void Initialize()
 	{
-	}
-
-	public override void OnLoad()
-	{
+		Log.Debug("Initializing Menu");
+		
 		// This will be the color of the background after we clear it, in normalized colors.
 		// Normalized colors are mapped on a range of 0.0 to 1.0, with 0.0 representing black, and 1.0 representing
 		// the largest possible value for that channel.
@@ -123,6 +120,10 @@ public class Game : Scene
 		//_shader.Use();
 
 		// Setup is now complete! Now we move to the OnRenderFrame function to finally draw the triangle.
+	}
+
+	public override void OnLoad()
+	{
 	}
 
 	public override void RenderFrame(FrameEventArgs e)

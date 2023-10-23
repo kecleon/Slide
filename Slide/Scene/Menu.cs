@@ -8,10 +8,6 @@ public class Menu : Scene
 	public override void Initialize()
 	{
 		Log.Debug("Initializing Menu");
-		
-		//checks? log setup? load assets?
-
-		Log.Info($"Slidehop {Constants.Version} loading");
 
 		//Assets.Load();
 		//var home = await Loader.LoadHome();
@@ -19,11 +15,19 @@ public class Menu : Scene
 		//render menu
 		//?
 		
-		var delay = Task.Run(async () =>
+		//var delay = Task.Run(async () =>
+		//{
+		//	await Task.Delay(1000);
+		//	var game = new Game();
+		//	Transition?.Invoke(game);
+		//});
+		new Thread(() =>
 		{
-			await Task.Delay(1000);
-			Transition?.Invoke(new Game());
-		});
+			Thread.Sleep(1000);
+			var game = new Game();
+			Transition?.Invoke(game);
+		}).Start();
+		//Transition?.Invoke(new Game());
 	}
 
 	public override void OnLoad()

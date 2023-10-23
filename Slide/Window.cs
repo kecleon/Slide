@@ -39,6 +39,8 @@ public class Window : GameWindow
 	private Window() : base(gameWindowSettings, nativeWindowSettings)
 	{
 		Title = $"Slidehop {Constants.Version}";
+		Log.Info($"Slidehop {Constants.Version} loading");
+		Assets.Load();
 		
 		Web = new();
 		Scene = new Menu();
@@ -47,36 +49,30 @@ public class Window : GameWindow
 	protected override async void OnLoad()
 	{
 		base.OnLoad();
-		Assets.Load();
 		
 		Log.Debug($"Loading!");
+		Scene.Transition += Transition;
 		Scene.Initialize();
 		Scene.OnLoad();
-		Scene.Transition += Transition;
 	}
 	
 	private void Transition(Scene.Scene obj)
 	{
-		//?
 		Scene.Transition -= Transition;
 
 		Log.Debug($"Switching from {Scene.GetType()} to {obj.GetType()}");
-		Scene.Dispose();
+		//Scene.Dispose();
 		Scene = obj;
-		Scene.Initialize();
-		Scene.OnLoad();
-		Scene.Transition += Transition;
+		OnLoad();
+		//Scene.Transition += Transition;
+		//Scene.Initialize();
+		//Scene.OnLoad();
 	}
 
 	protected override void OnRenderFrame(FrameEventArgs e)
 	{
 		base.OnRenderFrame(e);
 		Scene.RenderFrame(e);
-
-		// OpenTK windows are what's known as "double-buffered". In essence, the window manages two buffers.
-		// One is rendered to while the other is currently displayed by the window.
-		// This avoids screen tearing, a visual artifact that can happen if the buffer is modified while being displayed.
-		// After drawing, call this function to swap the buffers. If you don't, it won't display what you've rendered.
 		SwapBuffers();
 	}
 
