@@ -1,4 +1,5 @@
 ﻿using LibSlide;
+using OpenTK.Graphics.OpenGL4;
 using OpenTK.Windowing.Common;
 
 namespace Slide.Scene;
@@ -15,27 +16,17 @@ public class Menu : Scene
 		//render menu
 		//?
 		
-		//var delay = Task.Run(async () =>
-		//{
-		//	await Task.Delay(1000);
-		//	var game = new Game();
-		//	Transition?.Invoke(game);
-		//});
-		new Thread(() =>
+		var delay = Task.Run(async () =>
 		{
-			Thread.Sleep(1000);
+			await Task.Delay(1000);
 			var game = new Game();
 			Transition?.Invoke(game);
-		}).Start();
-		//Transition?.Invoke(new Game());
-	}
-
-	public override void OnLoad()
-	{
+		});
 	}
 	
 	public override void RenderFrame(FrameEventArgs e)
 	{
+		GL.Clear(ClearBufferMask.ColorBufferBit);
 	}
 	
 	public override void Dispose()

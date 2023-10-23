@@ -1,4 +1,4 @@
-﻿using OpenTK.Graphics.OpenGL;
+using OpenTK.Graphics.OpenGL;
 using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
 using OpenTK.Graphics.OpenGL4;
@@ -32,9 +32,9 @@ public class Game : Scene
 	// send them to OpenGL functions that need them.
 
 	// What these objects are will be explained in OnLoad.
-	private int _vertexBufferObject;
+	private int _vertexBufferObject = 0;
 
-	private int _vertexArrayObject;
+	private int _vertexArrayObject = 0;
 
 	// This class is a wrapper around a shader, which helps us manage it.
 	// The shader class's code is in the Common project.
@@ -43,6 +43,13 @@ public class Game : Scene
 
 	public override void Initialize()
 	{
+		var delay = Task.Run(async () =>
+		{
+			await Task.Delay(1000);
+			var game = new Menu();
+			Transition?.Invoke(game);
+		});
+		
 		Log.Debug("Initializing Game");
 		
 		// This will be the color of the background after we clear it, in normalized colors.
@@ -113,17 +120,13 @@ public class Game : Scene
 		// Shaders are tiny programs that live on the GPU. OpenGL uses them to handle the vertex-to-pixel pipeline.
 		// Check out the Shader class in Common to see how we create our shaders, as well as a more in-depth explanation of how shaders work.
 		// shader.vert and shader.frag contain the actual shader code.
-		//_shader = new("Shaders/shader.vert", "Shaders/shader.frag");
+		_shader = new("Shaders/shader.vert", "Shaders/shader.frag");
 
 		// Now, enable the shader.
 		// Just like the VBO, this is global, so every function that uses a shader will modify this one until a new one is bound instead.
-		//_shader.Use();
+		_shader.Use();
 
 		// Setup is now complete! Now we move to the OnRenderFrame function to finally draw the triangle.
-	}
-
-	public override void OnLoad()
-	{
 	}
 
 	public override void RenderFrame(FrameEventArgs e)
@@ -140,7 +143,7 @@ public class Game : Scene
 		// and then calling an OpenGL function to render.
 
 		// Bind the shader
-		//_shader.Use();
+		_shader.Use();
 
 		// Bind the VAO
 		GL.BindVertexArray(_vertexArrayObject);

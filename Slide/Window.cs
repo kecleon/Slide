@@ -1,4 +1,5 @@
-﻿using LibSlide;
+﻿using System.Collections.Concurrent;
+using LibSlide;
 using LibSlide.Assets;
 using OpenTK;
 using OpenTK.Graphics;
@@ -18,6 +19,8 @@ public class Window : GameWindow
 	
 	private Web Web;
 	private Scene.Scene Scene;
+
+	private ConcurrentQueue<Action> MainThreadQueue = new();
 
 	static Window()
 	{
@@ -42,31 +45,30 @@ public class Window : GameWindow
 		Log.Info($"Slidehop {Constants.Version} loading");
 		Assets.Load();
 		
+		Log.Debug($"Loading window!");
 		Web = new();
 		Scene = new Menu();
+		
+		Scene.Transition += QueueTransition;
+		Scene.Initialize();
 	}
 
-	protected override async void OnLoad()
+	private void QueueTransition(Scene.Scene obj)
 	{
-		base.OnLoad();
-		
-		Log.Debug($"Loading!");
-		Scene.Transition += Transition;
-		Scene.Initialize();
-		Scene.OnLoad();
+		EnqueueForMainThread(() =>
+		{
+			Log.Debug($"Switching from {Scene.GetType()} to {obj.GetType()}");
+			Scene.Transition -= QueueTransition;
+			Scene.Dispose();
+			obj.Initialize();
+			obj.Transition += QueueTransition;
+			Scene = obj;
+		});
 	}
 	
-	private void Transition(Scene.Scene obj)
+	private void EnqueueForMainThread(Action action)
 	{
-		Scene.Transition -= Transition;
-
-		Log.Debug($"Switching from {Scene.GetType()} to {obj.GetType()}");
-		//Scene.Dispose();
-		Scene = obj;
-		OnLoad();
-		//Scene.Transition += Transition;
-		//Scene.Initialize();
-		//Scene.OnLoad();
+		MainThreadQueue.Enqueue(action);
 	}
 
 	protected override void OnRenderFrame(FrameEventArgs e)
@@ -79,7 +81,11 @@ public class Window : GameWindow
 	protected override void OnUpdateFrame(FrameEventArgs e)
 	{
 		base.OnUpdateFrame(e);
-	}
+		while (MainThreadQueue.TryDequeue(out var action))
+		{
+			action.Invoke();
+		}
+    }
 
 	protected override void OnResize(ResizeEventArgs e)
 	{
