@@ -16,7 +16,7 @@ public class Window : GameWindow
 {
 	private static GameWindowSettings gameWindowSettings = new();
 	private static NativeWindowSettings nativeWindowSettings = new();
-	
+
 	private Web Web;
 	private Scene.Scene Scene;
 
@@ -25,10 +25,10 @@ public class Window : GameWindow
 	static Window()
 	{
 		gameWindowSettings.UpdateFrequency = 60;
-		nativeWindowSettings.Title =  $"Slidehop {Constants.Version}";
+		nativeWindowSettings.Title = $"Slidehop {Constants.Version}";
 		nativeWindowSettings.WindowBorder = WindowBorder.Resizable;
 		nativeWindowSettings.Size = new Vector2i(1280, 720);
-		
+
 		//todo: launch in fullscreen, launch on monitor where the current focused window is present
 		//var monitor = Monitors.GetPrimaryMonitor();
 	}
@@ -38,17 +38,17 @@ public class Window : GameWindow
 		using var app = new Window();
 		app.Run();
 	}
-	
+
 	private Window() : base(gameWindowSettings, nativeWindowSettings)
 	{
 		Title = $"Slidehop {Constants.Version}";
 		Log.Info($"Slidehop {Constants.Version} loading");
 		Assets.Load();
-		
+
 		Log.Debug($"Loading window!");
 		Web = new();
 		Scene = new Menu();
-		
+
 		Scene.Transition += QueueTransition;
 		Scene.Initialize();
 	}
@@ -65,7 +65,7 @@ public class Window : GameWindow
 			Scene = obj;
 		});
 	}
-	
+
 	private void EnqueueForMainThread(Action action)
 	{
 		MainThreadQueue.Enqueue(action);
@@ -85,12 +85,11 @@ public class Window : GameWindow
 		{
 			action.Invoke();
 		}
-    }
+	}
 
 	protected override void OnResize(ResizeEventArgs e)
 	{
 		base.OnResize(e);
 		GL.Viewport(0, 0, Size.X, Size.Y);
 	}
-	
 }

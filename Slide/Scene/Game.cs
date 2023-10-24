@@ -49,9 +49,9 @@ public class Game : Scene
 			var game = new Menu();
 			Transition?.Invoke(game);
 		});
-		
+
 		Log.Debug("Initializing Game");
-		
+
 		// This will be the color of the background after we clear it, in normalized colors.
 		// Normalized colors are mapped on a range of 0.0 to 1.0, with 0.0 representing black, and 1.0 representing
 		// the largest possible value for that channel.
@@ -160,7 +160,7 @@ public class Game : Scene
 
 		// And that's all you have to do for rendering! You should now see a yellow triangle on a black screen.
 	}
-	
+
 	public override void Dispose()
 	{
 	}

@@ -15,7 +15,7 @@ public class Menu : Scene
 		//parse home
 		//render menu
 		//?
-		
+
 		var delay = Task.Run(async () =>
 		{
 			await Task.Delay(1000);
@@ -23,12 +23,12 @@ public class Menu : Scene
 			Transition?.Invoke(game);
 		});
 	}
-	
+
 	public override void RenderFrame(FrameEventArgs e)
 	{
 		GL.Clear(ClearBufferMask.ColorBufferBit);
 	}
-	
+
 	public override void Dispose()
 	{
 	}
